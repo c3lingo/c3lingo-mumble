@@ -11,11 +11,15 @@ from threading import Thread
 from time import sleep
 import collections
 from typing import List, Dict
-#from pprint import pprint
-#import warnings
+import sounddevice as sd
+# from pprint import pprint
+# import warnings
 
 import pymumble_py3 as pymumble
 import pyaudio
+
+import numpy as np
+
 __version__ = "0.0.9"
 
 
@@ -41,6 +45,7 @@ class Status(collections.UserList):
 
 class Runner(collections.UserDict):
     """ Organizes Mumble connections """
+
     def __init__(self, run_dict: Dict[str, Dict[str, object]], args_dict: Dict[str, Dict[str, object]] = None):
 
         self.is_ready = False
@@ -57,7 +62,6 @@ class Runner(collections.UserDict):
             else:
                 self[name]["args"] = None
                 self[name]["kwargs"] = None
-
 
     def run(self):
         """ TODO """
@@ -102,10 +106,9 @@ class Audio(MumbleRunner):
         """ TODO """
         try:
             dbel = self[thread_name]["db"]
-            self["vol_vector"] = 10 ** (dbel/20)
+            self["vol_vector"] = 10 ** (dbel / 20)
         except KeyError:
             self["vol_vector"] = 1
-
 
     def __output_loop(self, periodsize):
         """ TODO """
@@ -114,24 +117,41 @@ class Audio(MumbleRunner):
 
     def __input_loop(self, periodsize):
         """ TODO """
-        p_in = pyaudio.PyAudio()
-        self.stream = p_in.open(input=True,
-                           channels=1,
-                           format=pyaudio.paInt16,
-                           rate=pymumble.constants.PYMUMBLE_SAMPLERATE,
-                           frames_per_buffer=periodsize)
+
+        # p_in = pyaudio.PyAudio()
+        # self.stream = p_in.open(input=True,
+        #                         channels=1,
+        #                         format=pyaudio.paInt16,
+        #                         rate=pymumble.constants.PYMUMBLE_SAMPLERATE,
+        #                         frames_per_buffer=periodsize)
+        # numpy_data = sd.rec(frames=100000,
+        #                     samplerate=sampling_frequency,
+        #                     channels=2,
+        #                     dtype='int16',
+        #                     mapping=[1, 2],
+        #                     blocking=True)
+
         while True:
-            print("reading in {} bytes".format(periodsize))
-            data = self.stream.read(periodsize)
-            print("data to be sent: {}".format(self.mumble.sound_output.get_buffer_size()))
-            print("bandwidth: {}, server_max_bandwidth: {}".format(self.mumble.bandwidth, self.mumble.server_max_bandwidth))
-            # print("{}".format(self.stream))
+            # print("reading in {} bytes".format(periodsize))
+            numpy_data: np.ndarray = sd.rec(frames=periodsize,
+                                samplerate=pymumble.constants.PYMUMBLE_SAMPLERATE,
+                                # channels=1,
+                                dtype='int16',
+                                mapping=[1, 2],
+                                blocking=True)
+
+            # data = self.stream.read(periodsize)
+            data = numpy_data[:, 0].tobytes(order="C")
+
+            print("{}".format(data))
             self.mumble.sound_output.add_sound(data)
+            print("data to be sent: {}".format(self.mumble.sound_output.get_buffer_size()))
         self.stream.close()
         return True
 
     def input_vol(self, dbint):
         pass
+
 
 class AudioPipe(MumbleRunner):
     def _config(self):
@@ -152,11 +172,12 @@ class AudioPipe(MumbleRunner):
 class Parser(MumbleRunner):
     pass
 
+
 def prepare_mumble(host, user, password="", certfile=None,
                    codec_profile="audio", bandwidth=96000, channel=None):
     """Will configure the pymumble object and return it"""
 
-    abot = pymumble.Mumble(host, user, certfile=certfile, password=password, debug=True)
+    abot = pymumble.Mumble(host, user, certfile=certfile, password=password, debug=False)
 
     abot.set_application_string("abot (%s)" % __version__)
     abot.set_codec_profile(codec_profile)
@@ -203,32 +224,30 @@ def main(preserve_thread=True):
 
     args = parser.parse_args()
 
-
     abot = prepare_mumble(args.host, args.user, args.password, args.certfile,
                           "audio", args.bandwidth, args.channel)
     if args.fifo_path:
         print("AudioPipe")
-        audio = AudioPipe(abot, {"output": {"args": (args.periodsize, ),
+        audio = AudioPipe(abot, {"output": {"args": (args.periodsize,),
                                             "kwargs": None},
                                  "input": {"args": (args.periodsize, args.fifo_path),
                                            "kwargs": None}
-                                }
-                         )
+                                 }
+                          )
     else:
         print("Audio")
-        audio = Audio(abot, {"output": {"args": (args.periodsize, ),
+        audio = Audio(abot, {"output": {"args": (args.periodsize,),
                                         "kwargs": None},
-                             "input": {"args": (args.periodsize, ),
+                             "input": {"args": (args.periodsize,),
                                        "kwargs": None}
-                            }
-                     )
+                             }
+                      )
     if preserve_thread:
         while True:
             print(audio.status())
             # print(audio.stream)
             sleep(1)
 
+
 if __name__ == "__main__":
     sys.exit(main())
-
-
