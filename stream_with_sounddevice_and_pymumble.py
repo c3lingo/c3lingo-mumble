@@ -3,15 +3,14 @@
 
 """
 import argparse
-import tempfile
 import queue
 import sys
 from typing import Union
-import time
 import numpy as np
 import pymumble_py3 as pymumble
 
 samplerate = pymumble.constants.PYMUMBLE_SAMPLERATE
+blocksize = 16
 
 def int_or_str(text) -> Union[str, int]:
     """Helper function for argument parsing."""
@@ -72,11 +71,13 @@ try:
         # q.put(indata.copy())
         q.put(indata[:, args.channel-1].tobytes())
 
+
+
     with sd.InputStream(samplerate=samplerate,
                         device=args.device,
                         channels=2,
                         callback=callback,
-                        blocksize=256,
+                        blocksize=blocksize,
                         dtype='int16'):
         print('#' * 80)
         print('press Ctrl+C to stop the stream')
