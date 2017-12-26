@@ -143,7 +143,7 @@ class Audio(MumbleRunner):
             # data = self.stream.read(periodsize)
             data = numpy_data[:, 0].tobytes(order="C")
 
-            print("{}".format(data))
+            # print("{}".format(data))
             self.mumble.sound_output.add_sound(data)
             print("data to be sent: {}".format(self.mumble.sound_output.get_buffer_size()))
         self.stream.close()
@@ -244,7 +244,7 @@ def main(preserve_thread=True):
                       )
     if preserve_thread:
         while True:
-            print(audio.status())
+            # print(audio.status())
             # print(audio.stream)
             sleep(1)
 
