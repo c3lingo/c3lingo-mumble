@@ -2,3 +2,5 @@
 /.idea/workspace.xml
 /venv
 /*.wav
+__pycache__
+/certs*
