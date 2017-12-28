@@ -72,7 +72,6 @@ try:
         q.put(indata[:, args.channel-1].tobytes())
 
 
-
     with sd.InputStream(samplerate=samplerate,
                         device=args.device,
                         channels=2,
