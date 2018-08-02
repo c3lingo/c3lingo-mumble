@@ -11,6 +11,7 @@ import sounddevice
 import numpy as np
 
 import sys
+from pymumble_py3.constants import PYMUMBLE_CONN_STATE_CONNECTED, PYMUMBLE_CONN_STATE_NOT_CONNECTED
 
 from c3lingo_mumble import asio_singleton
 
@@ -102,13 +103,14 @@ class MumbleClient(object):
                                                   user=self.mapping.mumble_username,
                                                   certfile=self.mapping.mumble_cert,
                                                   keyfile=self.mapping.mumble_key,
-                                                  debug=False)
+                                                  debug=False,
+                                                  reconnect=True)
 
         self.mumble_conn_thread._set_ident()
 
         self.mumble_conn_thread.set_application_string("c3lingo (%s)" % 0.1)
         self.mumble_conn_thread.set_codec_profile('audio')
-        self.mumble_ready = False
+        # self.mumble_ready = False
 
 
         # self.audio_input_thread = sounddevice.InputStream(
@@ -146,6 +148,14 @@ class MumbleClient(object):
     #
     #     return callback
 
+    @property
+    def mumble_ready(self):
+        # lock_acquired = self.mumble_conn_thread.ready_lock.acquire(False)
+        # if lock_acquired:
+        #     self.mumble_conn_thread.ready_lock.release()
+        mumble_connection_status = getattr(self.mumble_conn_thread, "connected", PYMUMBLE_CONN_STATE_NOT_CONNECTED)
+        return mumble_connection_status == PYMUMBLE_CONN_STATE_CONNECTED
+
     def start(self):
         LOG.error("starting threads")
 
@@ -167,5 +177,4 @@ class MumbleClient(object):
             .find_by_name(self.mapping.mumble_channel)
             .move_in(self.mumble_conn_thread.users.myself_session))
 
-        self.mumble_ready = True
 

@@ -36,8 +36,8 @@ class AsioSingleton(object):
     def inputstream_callback(self, indata: np.ndarray, frames: int, time, status: sounddevice.CallbackFlags):
         """This is called (from a separate thread) for each audio block."""
 
-        if status:
-            print(status, file=sys.stderr)
+        # if status:
+        #     print(status, file=sys.stderr)
 
         for channel, mumble_client in self.listeners.items():
 
