@@ -1,1 +1,7 @@
-.idea
+/.idea
+/.idea/misc.xml
+/.idea/workspace.xml
+/venv
+/*.wav
+__pycache__
+/certs*
