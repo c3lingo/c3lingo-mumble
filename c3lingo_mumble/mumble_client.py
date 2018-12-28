@@ -39,9 +39,11 @@ class MumbleClient(object):
                 try:
                     while True:
                         data = audio_queue.get(False)
-                        print('.', end='')
-                        # if mumble_client.mumble_ready:
-                        #     mumble_client.mumble_conn_thread.sound_output.add_sound(data)
+                        # print('.', end='')
+                        if self.mumble_ready:
+                            mumble_obj.sound_output.add_sound(data)
+                        else:
+                            del data
             
                 except Empty:
                     time.sleep(0.01)
