@@ -22,7 +22,7 @@ def handle_event(event, instance):
 
 def main():
     
-    instance = MumbleClient(host, int(port), channel, user, cert, key, sys.stdin)
+    instance = MumbleClient(host, int(port), channel, user, cert, key, sys.stdin.buffer)
 
     instance.retries = 0
 
