@@ -4,6 +4,7 @@ gst-launch-1.0 -q \
             udpsrc address=239.1.153.115 port=5004 multicast-iface=enp0s31f6.3507 ! \
             application/x-rtp,clock-rate=48000,channels=2 ! \
             rtpL24depay ! \
+            
             audioconvert ! \
             wavenc ! \
             fdsink | \

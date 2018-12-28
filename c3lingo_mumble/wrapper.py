@@ -39,6 +39,7 @@ def main(config_path):
         instances.append(instance)
 
     for instance in instances:
+        # something happens!
         instance_queue = instance.start()
         queues.append((instance_queue, instance))
 

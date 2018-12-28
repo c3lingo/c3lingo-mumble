@@ -45,42 +45,42 @@ q = queue.Queue(maxsize=100000)
 event = threading.Event()
 
 try:
-    import sounddevice as sd
+    # import sounddevice as sd
 
-    if args.list_devices:
-        print(sd.query_devices())
-        parser.exit(0)
-
-
-    def play_callback(outdata, frames, time, status):
-        assert frames == blocksize
-        if status.output_underflow:
-            print('Output underflow: increase blocksize?', file=sys.stderr)
-            raise sd.CallbackAbort
-        assert not status
-        try:
-            data = q.get_nowait()
-        except queue.Empty:
-            print('Buffer is empty: increase buffersize?', file=sys.stderr)
-            raise sd.CallbackAbort
-        if len(data) < len(outdata):
-            outdata[:len(data)] = data
-            outdata[len(data):] = b'\x00' * (len(outdata) - len(data))
-            raise sd.CallbackStop
-        else:
-            outdata[:] = data
+    # if args.list_devices:
+    #     print(sd.query_devices())
+    #     parser.exit(0)
 
 
-    # def rec_callback(data, frames, time, status):
-    def rec_callback(indata: np.ndarray, frames: int, time, status: sd.CallbackFlags):
-        # print(indata[:, args.channel-1].shape)
-        # print(type(frames))
-        # print(time)
-        # print(type(status))
-        """This is called (from a separate thread) for each audio block."""
-        if status:
-            print(status, file=sys.stderr)
-        q.put(indata[:, args.channel - 1].tobytes())
+    # def play_callback(outdata, frames, time, status):
+    #     assert frames == blocksize
+    #     if status.output_underflow:
+    #         print('Output underflow: increase blocksize?', file=sys.stderr)
+    #         raise sd.CallbackAbort
+    #     assert not status
+    #     try:
+    #         data = q.get_nowait()
+    #     except queue.Empty:
+    #         print('Buffer is empty: increase buffersize?', file=sys.stderr)
+    #         raise sd.CallbackAbort
+    #     if len(data) < len(outdata):
+    #         outdata[:len(data)] = data
+    #         outdata[len(data):] = b'\x00' * (len(outdata) - len(data))
+    #         raise sd.CallbackStop
+    #     else:
+    #         outdata[:] = data
+
+
+    # # def rec_callback(data, frames, time, status):
+    # def rec_callback(indata: np.ndarray, frames: int, time, status: sd.CallbackFlags):
+    #     # print(indata[:, args.channel-1].shape)
+    #     # print(type(frames))
+    #     # print(time)
+    #     # print(type(status))
+    #     """This is called (from a separate thread) for each audio block."""
+    #     if status:
+    #         print(status, file=sys.stderr)
+    #     q.put(indata[:, args.channel - 1].tobytes())
 
 
     # q = queue.Queue()
