@@ -1,11 +1,11 @@
 How to receive AES67 with gstreamer:
 
 gst-launch-1.0 -q \
-            udpsrc address=239.1.153.115 port=5004 multicast-iface=enp0s31f6.3507 ! \
+            udpsrc address=239.1.153.115 port=5004 multicast-iface=ens7 ! \
             application/x-rtp,clock-rate=48000,channels=2 ! \
             rtpL24depay ! \
-            
-            audioconvert ! \
+            audioconvert ! audioresample ! "audio/x-raw, format=S16LE, rate=48000" ! \
+            deinterleave name=d d.src0 ! \
             wavenc ! \
             fdsink | \
             ffprobe -
@@ -16,3 +16,7 @@ gst-launch-1.0 -q \
             application/x-rtp,clock-rate=48000,channels=2 ! \
             rtpL24depay ! \
             fdsink
+
+
+# split into mono
+gst-launch-1.0 -q udpsrc address=239.1.153.115 port=5004 multicast-iface=ens7 ! application/x-rtp,clock-rate=48000,channels=2 !             rtpL24depay !             audioconvert ! audioresample ! audio/x-raw, format=S16LE, rate=48000 ! deinterleave name=d d.src_0 ! fdsink
