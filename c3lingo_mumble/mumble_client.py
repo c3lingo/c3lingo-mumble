@@ -8,20 +8,17 @@ import time
 import queue
 import logging
 import threading
-# import numpy as np
 import pymumble_py3 as pymumble
 from queue import Empty
 from threading import Thread
 from pymumble_py3.constants import PYMUMBLE_CONN_STATE_CONNECTED, PYMUMBLE_CONN_STATE_NOT_CONNECTED
 
-
-LOG = logging.getLogger("fuuuu")
+LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.INFO)
 
-class MumbleClient(object):
 
+class MumbleClient(object):
     def start_listening(self):
-        #sys.stdin
         def thread_func(audio_queue, data_stream):
             while True:
                 data = data_stream.read(128)
@@ -39,7 +36,7 @@ class MumbleClient(object):
                 try:
                     while True:
                         data = audio_queue.get(False)
-                        # print('.', end='')
+                        
                         if self.mumble_ready:
                             mumble_obj.sound_output.add_sound(data)
                         else:
@@ -51,7 +48,6 @@ class MumbleClient(object):
         streamer_thread = Thread(target=thread_func, args=(self.audio_queue, self.mumble_conn_thread)) 
         streamer_thread.start()
         return streamer_thread
-        
 
     def __init__(self, hostname, port, channel, user, cert, key, stream):
         self.stream = stream
@@ -64,28 +60,13 @@ class MumbleClient(object):
                                                   user=user,
                                                   certfile=cert,
                                                   keyfile=key,
-                                                  debug=True,
+                                                  debug=False,
                                                   reconnect=True)
 
         self.mumble_conn_thread._set_ident()
 
         self.mumble_conn_thread.set_application_string("c3lingo (%s)" % 0.1)
         self.mumble_conn_thread.set_codec_profile('audio')
-        # self.mumble_ready = False
-
-
-        # self.audio_input_thread = sounddevice.InputStream(
-        #     samplerate=48000,  # PyMumble wills it.
-        #     device=self.mapping.audio_input,
-        #     channels=sounddevice.query_devices(self.mapping.audio_input)["max_input_channels"],  # TODO: Move to configuration
-        #     callback=self.construct_audio_callback(),
-        #     blocksize=128,  # TODO: Move to configuration
-        #     dtype='int16')
-
-        # self.audio_input_proxy = input_stream
-
-        # self.audio_input_proxy.initialize(self.mapping.audio_input)
-        # self.audio_input_proxy.add_listener(self.mapping.audio_channel, self)
 
     @property
     def mumble_ready(self):
@@ -118,5 +99,3 @@ class MumbleClient(object):
         foo = (self.mumble_conn_thread.channels
             .find_by_name(self.mumble_channel))
         foo.move_in(self.mumble_conn_thread.users.myself_session)
-
-
