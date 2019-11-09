@@ -1,0 +1,9 @@
+---
+file: test-channel.wav
+channel: Test
+host: my-mumble-server.example.com
+user: test-channel-announcer
+certfile: test-channel-cert.pem
+keyfile: test-channel-key.pem
+reconnect: true
+loop: true

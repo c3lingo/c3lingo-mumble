@@ -5,3 +5,5 @@
 /*.wav
 __pycache__
 /certs*
+Pipfile.lock
+
