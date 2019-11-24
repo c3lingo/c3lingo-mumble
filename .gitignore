@@ -3,7 +3,10 @@
 /.idea/workspace.xml
 /venv
 /*.wav
+certs/*-key.pem
+certs/*.p12
 __pycache__
-/certs*
 Pipfile.lock
 
+.gitsecret/keys/random_seed
+!*.secret
