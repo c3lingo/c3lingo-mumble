@@ -1,0 +1,19 @@
+---
+sources:
+  'snd_rpi_hifiberry_dacplusadc':
+    0:
+      channel: Adams-1
+      server:
+        host: my-mumble-server.example.com
+        user: adams-1
+        certfile: certs/adams-1-cert.pem
+        keyfile: certs/adams-1-key.pem
+        reconnect: true
+    1:
+      channel: Adams-2
+      server:
+        host: my-mumble-server.example.com
+        user: adams-2
+        certfile: certs/adams-2-cert.pem
+        keyfile: certs/adams-2-key.pem
+        reconnect: true
