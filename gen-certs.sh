@@ -1,7 +1,7 @@
 #!/bin/sh
 
 for i in adams borg clarke dijkstra eliza; do
-  for j in 1 2; do
+  for j in 0 1 2; do
     CN="$i-$j"
     cat >.openssl.cnf <<EOF
 [ req ]
