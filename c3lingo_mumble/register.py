@@ -28,6 +28,7 @@ def register(server_args, user, certfile, keyfile):
         raise Exception(f'Connection to "{server_args["host"]}" as "{user}" failed')
 
     admin.users[mumble.users.myself_session].register()
+    admin.channels.new_channel(0, mumble.user, False)
     time.sleep(1)
 
     print(f'User {mumble.user} registered')
