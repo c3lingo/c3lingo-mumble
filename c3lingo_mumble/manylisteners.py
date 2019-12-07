@@ -62,3 +62,5 @@ if __name__ == "__main__":
         time.sleep(float(ramp_seconds) / int(count))
     print(f'ramp to {count} listeners completed, sleeping for {sustain_seconds} seconds')
     time.sleep(float(sustain_seconds))
+    print(f'Done.')
+    sys.exit(0)
