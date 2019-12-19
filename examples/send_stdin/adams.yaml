@@ -1,0 +1,29 @@
+---
+#
+# Use this example with a source with three audio channels.
+#
+# With Voctomix as a source:
+# ffmpeg -i 35c3-9723-deu-eng-spa-Smart_Home_-_Smart_Hack_hd.mkv -filter_complex '[0:a]pan=3c|c0=.5*c0+.5*c1|c1=.5*c2+.5*c3|c2=.5*c4+.5*c5[a0]' -map '[a0]' -ac 3 -f s16le -c:a pcm_s16le -y - | pipenv run python -m c3lingo_mumble.send_stdin -f adams.yml
+#
+channels:
+  - channel: Adams-0
+    server:
+      host: my-mumble-server.example.com
+      user: adams-1
+      certfile: certs/adams-0-cert.pem
+      keyfile: certs/adams-0-key.pem
+      reconnect: true
+  - channel: Adams-1
+    server:
+      host: my-mumble-server.example.com
+      user: adams-1
+      certfile: certs/adams-1-cert.pem
+      keyfile: certs/adams-1-key.pem
+      reconnect: true
+  - channel: Adams-2
+    server:
+      host: my-mumble-server.example.com
+      user: adams-2
+      certfile: certs/adams-2-cert.pem
+      keyfile: certs/adams-2-key.pem
+      reconnect: true
