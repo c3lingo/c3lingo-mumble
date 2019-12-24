@@ -22,7 +22,7 @@ EOF
     -in certs/${CN}-cert.pem
 }
 
-for i in adams borg clarke dijkstra eliza; do
+for i in ada borg clarke dijkstra eliza wikipaka; do
   for j in 0 1 2; do
     gencert "$i-$j"
   done
