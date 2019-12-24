@@ -77,9 +77,11 @@ class StdinSender:
 
     def send(self):
         while True:
-            streams = self.split_channels(
-                sys.stdin.buffer.read(480 * 2 * self.maxchannels),
-                self.maxchannels)
+            b = sys.stdin.buffer.read(480 * 2 * self.maxchannels)
+            if not b:
+                print('End of source file')
+                break
+            streams = self.split_channels(b, self.maxchannels)
             for index in range(len(self.config)):
                 self.mumbles[index].send(streams[index])
 
@@ -100,11 +102,6 @@ if __name__ == "__main__":
             sys.exit(64)
         input = StdinSender(config['channels'])
         input.start()
-        while True:
-            # counters = []
-            # for mumble in input.mumbles.values():
-            #     counters.append(mumble.count)
-            # print(f'    {counters}')
-            time.sleep(1)
+        input.thread.join()
     except AppError as e:
         print(f'Unable to send audio: {e.__class__.__name__}: {e}', file=sys.stderr)
