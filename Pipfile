@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-pymumble = {editable = true,git = "ssh://git@github.com/azlux/pymumble.git"}
+pymumble = {editable = true,git = "https://github.com/azlux/pymumble.git"}
 opuslib = "*"
 google = "*"
 protobuf = "*"

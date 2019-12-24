@@ -2,8 +2,7 @@ beautifulsoup4==4.8.1
 google==2.0.3
 opuslib==3.0.1
 protobuf==3.11.1
-PyAudio==0.2.11
--e git+ssh://git@github.com/azlux/pymumble.git@e57898fbaeda76ed40a9ea7132d6d9809916597e#egg=pymumble
+-e git+https://github.com/azlux/pymumble.git@e57898fbaeda76ed40a9ea7132d6d9809916597e#egg=pymumble
 PyYAML==5.2
 six==1.13.0
 soupsieve==1.9.5
