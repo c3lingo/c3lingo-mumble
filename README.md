@@ -8,6 +8,11 @@ required for this setup. The master branch has all python modules.
 
 The Python code requires Python 3.7 or newer, and `pipenv` or `venv` and pip`.
 
+Debian:
+```
+sudo apt install -y git python3-dev python3-venv python3-wheel
+```
+
 Then create a virtual environment for the project.
 
 With `venv` and `pipenv`:
