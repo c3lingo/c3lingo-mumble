@@ -13,6 +13,11 @@ Debian:
 sudo apt install -y git python3-dev python3-venv python3-wheel
 ```
 
+Mac:
+```sh
+brew install opus python
+```
+
 Then create a virtual environment for the project.
 
 With `venv` and `pipenv`:
