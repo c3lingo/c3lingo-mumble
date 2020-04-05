@@ -6,7 +6,8 @@
 certs/*-key.pem
 certs/*.p12
 __pycache__
-*.pyc
+Pipfile.lock
 
-.gitsecret/keys/random_seed
-!*.secret
+.git
+.gitsecret
+certs

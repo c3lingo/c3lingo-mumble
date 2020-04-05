@@ -1,0 +1,13 @@
+[Unit]
+Description=Send Audio to Mumble Server
+After=mumblesender.service
+
+[Service]
+User=mumblesender
+Restart=always
+Type=simple
+WorkingDirectory=/home/mumblesender/c3lingo
+ExecStart=ffmpeg -loglevel error -i tcp://localhost:15000 -filter_complex '[0:a]pan=3c|c0=.5*c0+.5*c1|c1=.5*c2+.5*c3|c2=.5*c4+.5*c5[a0]' -map '[a0]' -ac 3 -f s16le -c:a pcm_s16le -y - | pipenv run python -m c3lingo_mumble.send_stdin -f c3lingo-adams.yaml
+
+[Install]
+WantedBy=multi-user.target
