@@ -1,0 +1,13 @@
+/.idea
+/.idea/misc.xml
+/.idea/workspace.xml
+/venv
+/*.wav
+certs/*-key.pem
+certs/*.p12
+__pycache__
+Pipfile.lock
+
+.git
+.gitsecret
+certs
