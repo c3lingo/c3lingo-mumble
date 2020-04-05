@@ -1,37 +1,83 @@
-# Feed talk audio streams to the c3lingo mumble server for 36c3
+# Mumble Audio Utilities
 
-The setup this year is different from previous occasions. This README describes
-the setup specifically for 36c3; this branch has only the files that are
-required for this setup. The master branch has all python modules.
+This project contains Python modules that are used in conjuction with a Mumble server to insert and extract audio into/from Mumble channels.
 
 ## Installation
 
 The Python code requires Python 3.7 or newer, and `pipenv` or `venv` and pip`.
 
-Debian:
+### Docker
+
+A docker image is available at https://hub.docker.com/r/c3lingo/c3lingo-mumble. Use the docker image like you would use the Python command:
+
 ```
-sudo apt install -y git python3-dev python3-venv python3-wheel
+docker run --rm -it -v $PWD/c3lingo-mumbleweb:/c3lingo-mumbleweb c3lingo/c3lingo-mumble:latest -m c3lingo_mumble.play_wav -c /c3lingo-mumbleweb/test-channel.yaml
 ```
 
-Mac:
+### Local Installation
+
+Install the prerequisite packages, then set up a local environment.
+
+#### Debian
+```
+sudo apt install -y git python3-dev python3-venv python3-wheel libopus-dev
+```
+
+#### Mac
 ```sh
 brew install opus python
 ```
 
-Then create a virtual environment for the project.
+#### Local Environment with Pipenv
 
-With `venv` and `pipenv`:
+With `pipenv`:
 ```
 $ pipenv install
 ```
 
-With `pip`
+#### Local Environment with Pip
+
+With `venv` and `pip`
 ```
 $ python3 -m venv .venv
 $ .venv/bin/pip install -r requirements.txt
 ```
 
-## Setup
+## Using c3lingo-mumble
+
+### Playing a WAV file to a Mumble channel with `play_wav`
+
+This module connects to a channel and plays the wav file. The file can be played in a loop.
+
+```
+python -m c3lingo_mumble.play_wav -c examples/play_wav/test-channel.yaml
+```
+
+The config file contains all necessary information. See [examples/play_wav/test-channel.yaml](./examples/play_wav/test-channel.yaml) for an example.
+
+### Receive audio from a channel with `recv_stdout`
+
+This module connect to a channel and produces any audio received on standard out, as raw little endian 16 bit PCM 48000 samples/sec.
+
+```
+python -m c3lingo_mumble.recv_stdout mumble.c3lingo.org test
+```
+
+The optional third argument specifies a file to record to. Recording stops when the Python program is stopped (^C or kill).
+
+### Additional Modules
+
+There are more useful modules. See the source code and the (examples/)[examples/] directory for more information.
+
+## Building
+
+### Updating `requirements.txt`
+
+```
+pipenv run pip freeze > requirements.txt
+```
+
+## Setup at 36c3
 
 Audio is taken directly from the Voctomix setup (on the Voctomix host).
 
