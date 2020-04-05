@@ -20,3 +20,9 @@ jobs:
       run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
     - name: Push to Docker Hub
       run: docker push c3lingo/c3lingo-mumble:latest
+    - name: Docker Hub  Description
+      uses: peter-evans/dockerhub-description@v2
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        DOCKERHUB_REPOSITORY: c3lingo/c3lingo-mumble

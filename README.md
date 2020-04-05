@@ -1,3 +1,5 @@
+![Docker Image CI](https://github.com/c3lingo/c3lingo-mumble/workflows/Docker%20Image%20CI/badge.svg)
+
 # Mumble Audio Utilities
 
 This project contains Python modules that are used in conjuction with a Mumble server to insert and extract audio into/from Mumble channels.
