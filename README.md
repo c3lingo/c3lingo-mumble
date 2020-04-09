@@ -22,12 +22,12 @@ Install the prerequisite packages, then set up a local environment.
 
 #### Debian
 ```
-sudo apt install -y git python3-dev python3-venv python3-wheel libopus-dev
+sudo apt install -y git python3-dev python3-venv python3-wheel libopus-dev portaudio19-dev pulseaudio
 ```
 
 #### Mac
 ```sh
-brew install opus python
+brew install opus python portaudio
 ```
 
 #### Local Environment with Pipenv
@@ -60,7 +60,7 @@ The config file contains all necessary information. See [examples/play_wav/test-
 
 ### Receive audio from a channel with `recv_stdout` and send it to stdout
 
-This module connect to a channel and produces any audio received on standard out, as raw little endian 16 bit PCM 48000 samples/sec.
+This module connects to a channel and produces any audio received on standard out, as raw little endian 16 bit PCM 48000 samples/sec.
 
 ```
 python -m c3lingo_mumble.recv_stdout mumble.c3lingo.org test
@@ -71,7 +71,7 @@ The optional third argument specifies a file to record to. Recording stops when 
 
 ### Receive audio from a channel with `recv_pyaudio` and send it to an output
 
-This module connect to a channel and produces any audio received on standard out, as raw little endian 16 bit PCM 48000 samples/sec.
+This module connects to a channel and send the sound to a [PortAudio](http://www.portaudio.com) device.
 
 ```
 python -m c3lingo_mumble.recv_stdout mumble.c3lingo.org test headphones
