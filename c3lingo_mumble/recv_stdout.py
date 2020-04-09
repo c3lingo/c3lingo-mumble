@@ -8,11 +8,8 @@ import time
 import threading
 
 from array import array
-from datetime import datetime, timedelta
 
 from pymumble_py3 import Mumble
-from pymumble_py3.callbacks import PYMUMBLE_CLBK_SOUNDRECEIVED
-from pymumble_py3.constants import PYMUMBLE_CONN_STATE_NOT_CONNECTED
 
 
 class MumbleReceiver:

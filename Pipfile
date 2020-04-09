@@ -11,6 +11,7 @@ opuslib = "*"
 google = "*"
 protobuf = "*"
 pyyaml = "*"
+pyaudio = "*"
 
 [requires]
 python_version = "3.7"

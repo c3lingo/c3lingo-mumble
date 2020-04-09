@@ -5,48 +5,19 @@ Send one or more channels of audio recording from PyAudio sources to
 selected Mumble channels.
 """
 import argparse
-import os
-import re
 import struct
 import sys
 import threading
 import time
-import wave
 
-import pyaudio
 import pymumble_py3
 import yaml
 
-from c3lingo_mumble.stdchannel_redirected import stdchannel_redirected
+from c3lingo_mumble.audio import Audio
 
 
 class AppError(Exception):
     pass
-
-class Audio:
-    def __init__(self):
-        with stdchannel_redirected(sys.stderr, os.devnull):
-            self.pyaudio = pyaudio.PyAudio()
-        # devinfo = pyaudio_get_devinfo(p, 'snd_rpi_hifiberry_dacplusadc')
-        # if not devinfo:
-
-    def get_devinfo(self, regex, min_input_channels=1):
-        regex = re.compile(regex)
-        info = self.pyaudio.get_host_api_info_by_index(0)
-        numdevices = info.get('deviceCount')
-        for i in range (0, numdevices):
-            devinfo = self.pyaudio.get_device_info_by_host_api_device_index(0, i)
-            if regex.match(devinfo['name']) and devinfo['maxInputChannels'] >= min_input_channels:
-                return devinfo
-        return None
-
-    def list_devices(self):
-        info = self.pyaudio.get_host_api_info_by_index(0)
-        numdevices = info.get('deviceCount')
-        print(f'{numdevices} PyAudio devices: (input/output channels)')
-        for i in range (0, numdevices):
-            devinfo = self.pyaudio.get_device_info_by_host_api_device_index(0, i)
-            print(f'  {i} - {devinfo["name"]} ({devinfo["maxInputChannels"]}/{devinfo["maxOutputChannels"]})')
 
 
 class MumbleSender:

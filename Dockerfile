@@ -1,7 +1,7 @@
 FROM python:buster
 
 RUN apt-get -y update && \
-    apt-get install -y libopus-dev && \
+    apt-get install -y libopus-dev portaudio19-dev pulseaudio && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

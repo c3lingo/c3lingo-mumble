@@ -57,7 +57,8 @@ python -m c3lingo_mumble.play_wav -c examples/play_wav/test-channel.yaml
 
 The config file contains all necessary information. See [examples/play_wav/test-channel.yaml](./examples/play_wav/test-channel.yaml) for an example.
 
-### Receive audio from a channel with `recv_stdout`
+
+### Receive audio from a channel with `recv_stdout` and send it to stdout
 
 This module connect to a channel and produces any audio received on standard out, as raw little endian 16 bit PCM 48000 samples/sec.
 
@@ -66,6 +67,21 @@ python -m c3lingo_mumble.recv_stdout mumble.c3lingo.org test
 ```
 
 The optional third argument specifies a file to record to. Recording stops when the Python program is stopped (^C or kill).
+
+
+### Receive audio from a channel with `recv_pyaudio` and send it to an output
+
+This module connect to a channel and produces any audio received on standard out, as raw little endian 16 bit PCM 48000 samples/sec.
+
+```
+python -m c3lingo_mumble.recv_stdout mumble.c3lingo.org test headphones
+```
+
+The third argument specifies the device to play the audio on. To get a list of devices, run
+```
+python -m c3lingo_mumble.audio
+```
+Then use the index or the name of the device.
 
 ### Additional Modules
 
