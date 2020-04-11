@@ -68,11 +68,16 @@ class MumbleReceiver:
     def get_audio(self):
         buffer = array("h", [0] * int(self.interval * self.rate))
         for user in self.channel.get_users():
-            sound = user.sound.get_sound(self.interval)
-            if not sound:
-                continue
             samples = array("h")
-            samples.frombytes(sound.pcm)
+            while len(samples) < len(buffer):
+                sound = user.sound.get_sound(self.interval)
+                if not sound:
+                    break
+                samples.frombytes(sound.pcm)
+            if sys.byteorder == 'big':
+                samples.byteswap()
+            for i in range(0, len(samples)):
+                buffer[i] = self.clip(buffer[i] + samples[i])
             if sys.byteorder == 'big':
                 samples.byteswap()
             for i in range(0, len(samples)):

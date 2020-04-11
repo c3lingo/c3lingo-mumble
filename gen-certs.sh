@@ -22,8 +22,8 @@ EOF
     -in certs/${CN}-cert.pem
 }
 
-for i in ada borg clarke dijkstra eliza saal23 wikipaka; do
-  for j in 0 1 2; do
+for i in DiVOC-Test; do
+  for j in 1 2; do
     gencert "$i-$j"
   done
 done
