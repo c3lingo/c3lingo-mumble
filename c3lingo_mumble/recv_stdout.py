@@ -56,7 +56,7 @@ class MumbleReceiver:
                 while len(samples) < len(buffer):
                     sound = user.sound.get_sound(self.interval)
                     if not sound:
-                        print(f"not enough samples: {len(samples)} < {len(buffer)}", out=sys.stderr)
+                        # print(f"not enough samples: {len(samples)} < {len(buffer)}", file=sys.stderr)
                         break
                     samples.frombytes(sound.pcm)
                 if sys.byteorder == 'big':
@@ -78,6 +78,8 @@ def main():
         print(f"usage: {os.path.basename(sys.argv[0])} server channel [file]", file=sys.stderr)
         sys.exit(64)
     (ignore, server, channel, *file) = sys.argv
+    if file and len(file) > 0:
+        file = file[0]
     client = MumbleReceiver(server, channel, file)
     while True:
         time.sleep(1)
