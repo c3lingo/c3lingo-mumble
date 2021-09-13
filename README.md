@@ -2,7 +2,7 @@
 
 # Mumble Audio Utilities
 
-This project contains Python modules that are used in conjuction with a Mumble server to insert and extract audio into/from Mumble channels.
+This project contains Python modules that are used in conjunction with a Mumble server to insert and extract audio into/from Mumble channels.
 
 ## Installation
 
