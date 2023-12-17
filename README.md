@@ -6,7 +6,7 @@ This project contains Python modules that are used in conjunction with a Mumble 
 
 ## Installation
 
-The Python code requires Python 3.7 or newer, and `pipenv` or `venv` and pip`.
+The Python code requires Python 3.7 or newer, and `pipenv` or `venv` and `pip`.
 
 ### Docker
 
