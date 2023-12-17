@@ -34,7 +34,7 @@ def register(server_args, user, certfile, keyfile):
     print(f'User {mumble.user} registered')
 
 if __name__ == "__main__":
-    config = Config(description='Send a WAV file to a Mumble server',
+    config = Config(description='Register a user cert with the server',
                     defaults={
                         'mumble-server': {
                             # see pymumble_py3.mumbly.Mumble.__init__
