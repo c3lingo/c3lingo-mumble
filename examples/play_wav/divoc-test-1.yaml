@@ -1,0 +1,13 @@
+---
+# run the example with:
+# python -m c3lingo_mumble.play_wav -c examples/play_wav/test-channel.yaml
+file: ./C-RadaR-04-2020.wav
+#file: examples/play_wav/c3lingo-test-channel.wav
+#channel: Lounge
+channel: DiVOC-Feinler-Translation-1
+host: mumble.c3lingo.org
+user: DiVOC-Test-1
+certfile: certs/DiVOC-Test-1-cert.pem
+keyfile: certs/DiVOC-Test-1-key.pem
+reconnect: true
+loop: true

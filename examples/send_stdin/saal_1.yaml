@@ -1,0 +1,33 @@
+---
+#
+# Use this example with a source with three audio channels.
+#
+# With a recording as the source:
+# ffmpeg -i ~/Downloads/35c3-9723-deu-eng-spa-Smart_Home_-_Smart_Hack_hd.mp4 -filter_complex '[0:a:0]pan=1c|c0<c0+c1[l0];[0:a:1]pan=1c|c0<c0+c1[l1];[0:a:2]pan=1c|c0<c0+c1[l2];[l0][l1][l2]amerge=inputs=3[combined]' -map '[combined' -ac 3 -f s16le -c:a pcm_s16le -y - >3channel.pcm
+# pipenv run python -m c3lingo_mumble.send_stdin -f examples/send_stdin/saal_1.yaml <3channel.pcm
+#
+channels:
+  - channel: Saal_1-original
+    server:
+      host: mumble.c3lingo.org
+      user: Saal_1-0
+      certfile: certs/Saal_1-0-cert.pem
+      keyfile: certs/Saal_1-0-key.pem
+      reconnect: true
+    level: -45
+  - channel: Saal_1-translation-1
+    server:
+      host: mumble.c3lingo.org
+      user: Saal_1-1
+      certfile: certs/Saal_1-1-cert.pem
+      keyfile: certs/Saal_1-1-key.pem
+      reconnect: true
+    level: -45
+  - channel: Saal_1-translation-2
+    server:
+      host: mumble.c3lingo.org
+      user: Saal_1-2
+      certfile: certs/Saal_1-2-cert.pem
+      keyfile: certs/Saal_1-2-key.pem
+      reconnect: true
+    level: -45

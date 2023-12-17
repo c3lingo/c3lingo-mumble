@@ -5,6 +5,8 @@ Send one or more channels of audio recording from PyAudio sources to
 selected Mumble channels.
 """
 import argparse
+import audioop
+import math
 import os
 import re
 import struct
@@ -23,14 +25,26 @@ class AppError(Exception):
     pass
 
 
+def dBFS(value):
+    if value < 1:
+        value = 1
+    return 20 * math.log10(value / 32767) + 3
+
+
+def volume(buffer):
+    return dBFS(audioop.rms(buffer, 2))
+
+
 class MumbleSender:
-    def __init__(self, server_args, channelname):
+    def __init__(self, server_args, channelname, level=-999):
         self.server_args = server_args
         self.channel = channelname
+        self.level = level
         self.count = 0
 
         mumble = pymumble_py3.Mumble(**server_args)
         self.mumble = mumble
+        mumble.set_receive_sound(True)
         mumble.start()
         mumble.is_ready()
 
@@ -48,7 +62,9 @@ class MumbleSender:
             raise AppError(f'Unable to move to channel "{channelname}"')
 
     def send(self, data):
-        self.mumble.sound_output.add_sound(data)
+        v = volume(data)
+        if self.mumble.sound_output is not None and v > self.level:
+            self.mumble.sound_output.add_sound(data)
         self.count += 1
 
 
@@ -58,8 +74,9 @@ class StdinSender:
         self.mumbles = {}
         self.maxchannels = len(config)
         for (index, params) in enumerate(self.config):
-            self.mumbles[index] = MumbleSender(params['server'], params['channel'])
-            print(f'Connected {index} to {params["server"]["host"]}/{params["channel"]}')
+            level = params['level'] if 'level' in params else -999
+            self.mumbles[index] = MumbleSender(params['server'], params['channel'], level)
+            print(f'Connected {index} to {params["server"]["host"]}/{params["channel"]}, minimum level {level}')
 
     def start(self):
         self.thread = threading.Thread(target=self.send, daemon=True)
@@ -84,6 +101,7 @@ class StdinSender:
             streams = self.split_channels(b, self.maxchannels)
             for index in range(len(self.config)):
                 self.mumbles[index].send(streams[index])
+            time.sleep(0.005)
 
 
 if __name__ == "__main__":

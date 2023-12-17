@@ -2,11 +2,15 @@
 /.idea/misc.xml
 /.idea/workspace.xml
 /venv
-/*.wav
-certs/*-key.pem
-certs/*.p12
+*~
+*.pcm
 __pycache__
 *.pyc
+*.wav
+certs/*-key.pem
+certs/*.p12
+certs/old
+.DS_Store
 
 .gitsecret/keys/random_seed
 !*.secret

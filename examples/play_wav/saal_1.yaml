@@ -1,0 +1,13 @@
+---
+# run the example with:
+# python -m c3lingo_mumble.play_wav -c examples/play_wav/test-channel.yaml
+file: examples/play_wav/c3lingo-test-channel.wav
+channel: Saal_1-original
+host: mumble.c3lingo.org
+user: Saal-1-0
+certfile: certs/Saal_1-0-cert.pem
+keyfile: certs/Saal_1-0-key.pem
+reconnect: true
+loop: true
+debug: 0
+level: -50

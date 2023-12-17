@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+import audioop
+import logging
+import math
 import sys
 import time
 import wave
@@ -8,10 +10,22 @@ from c3lingo_mumble.config import Config
 import pymumble_py3
 
 
-def play_wav(server_args, channelname, file):
+def dBFS(value):
+    if value < 1:
+        value = 1
+    return 20 * math.log10(value / 32767) + 3
+
+
+def volume(buffer):
+    return dBFS(audioop.rms(buffer, 2))
+
+
+def play_wav(server_args, channelname, file, level):
     mumble = pymumble_py3.Mumble(**server_args)
+    mumble.set_receive_sound(True)
     mumble.start()
     mumble.is_ready()
+    log = logging.getLogger('play_wav')
 
     if not mumble.is_alive():
         raise Exception(f'Connection to "{server_args["host"]}" failed')
@@ -34,7 +48,13 @@ def play_wav(server_args, channelname, file):
                 start = time.perf_counter()
                 data = wf.readframes(chunk)
                 while len(data) > 0:
-                    mumble.sound_output.add_sound(data)
+                    v = volume(data)
+                    log.debug(f'Seconds to send: {mumble.sound_output.get_buffer_size():5.1f}s, volume: {v:5.1f} dbFS')
+                    if v > level:
+                        mumble.sound_output.add_sound(data)
+                        time.sleep(mumble.sound_output.get_buffer_size() * 0.9)
+                    else:
+                        log.debug(f'Skipping chunk because volume {v:5.1f} dBFS is below {level:3.0f} dBFS')
                     data = wf.readframes(chunk)
             now = time.perf_counter()
             elapsed = now - start
@@ -62,21 +82,27 @@ if __name__ == "__main__":
                             'debug': False,
                         },
                         'channel': None,
-                        'loop': True
+                        'loop': True,
+                        'level': -999
                     })
     c = config.get_config()
     for k in ('file', 'channel'):
-        if k not in c:
+        if k not in c or c[k] is None:
             print('Missing required parameter --{}'.format(k))
             sys.exit(64)
     for k in ('host',):
-        if k not in c['mumble-server']:
+        if k not in c['mumble-server'] or c['mumble-server'][k] is None:
             print('Missing required parameter --{}'.format(k))
             sys.exit(64)
-    print('Playing \"{}\" on channel \"{}\" at {}'
-          .format(c['file'], c['channel'], c['mumble-server']['host']))
+    lh = logging.StreamHandler(stream=sys.stderr)
+    lh.setLevel(logging.DEBUG if c['mumble-server']['debug'] else logging.INFO)
+    lh.setFormatter(logging.Formatter('%(asctime)s-%(name)s-%(levelname)s-%(message)s'))
+    logging.root.addHandler(lh)
+    log = logging.getLogger('play_wav')
+    log.setLevel(logging.INFO)
+    log.info(f"Playing \"c['file']\" on channel \"c['channel']\" at c['mumble-server']['host']")
     try:
-        play_wav(c['mumble-server'], c['channel'], c['file'])
+        play_wav(c['mumble-server'], c['channel'], c['file'], c['level'])
     except Exception as e:
         print(f'Unable to play file: {e.__class__.__name__}: {e}', file=sys.stderr)
 
