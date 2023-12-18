@@ -1,9 +1,9 @@
-beautifulsoup4==4.9.0
-google==2.0.3
+-i https://pypi.org/simple
+beautifulsoup4==4.12.2 ; python_full_version >= '3.6.0'
+google==3.0.0
 opuslib==3.0.1
-protobuf==3.11.3
-PyAudio==0.2.11
--e git+https://github.com/azlux/pymumble.git@37805ffba6148c4d082b70c0574b10de7c104a16#egg=pymumble
-PyYAML==5.3.1
-six==1.14.0
-soupsieve==2.0
+protobuf==3.20.3 ; python_version >= '3.7'
+pyaudio==0.2.14
+-e "git+https://github.com/azlux/pymumble.git@8be2d18ac7324669e1fcd9b37083560fadb9e9e7#egg=pymumble ; python_version >= '3.6'"
+pyyaml==6.0.1 ; python_version >= '3.6'
+soupsieve==2.5 ; python_version >= '3.8'
