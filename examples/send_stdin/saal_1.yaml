@@ -14,7 +14,7 @@ channels:
       certfile: certs/Saal_1-0-cert.pem
       keyfile: certs/Saal_1-0-key.pem
       reconnect: true
-    level: -45
+    level: -36
   - channel: Saal_1-translation-1
     server:
       host: mumble.c3lingo.org
@@ -22,7 +22,7 @@ channels:
       certfile: certs/Saal_1-1-cert.pem
       keyfile: certs/Saal_1-1-key.pem
       reconnect: true
-    level: -45
+    level: -36
   - channel: Saal_1-translation-2
     server:
       host: mumble.c3lingo.org
@@ -30,4 +30,4 @@ channels:
       certfile: certs/Saal_1-2-cert.pem
       keyfile: certs/Saal_1-2-key.pem
       reconnect: true
-    level: -45
+    level: -36

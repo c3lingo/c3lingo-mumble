@@ -41,6 +41,9 @@ class MumbleSender:
         self.channel = channelname
         self.level = level
         self.count = 0
+        self.last_report = time.time()
+        self.report_interval = 30  # report every 30 seconds
+        self.report_lag_above = 2  # more than 2 seconds lag
 
         mumble = pymumble_py3.Mumble(**server_args)
         self.mumble = mumble
@@ -66,6 +69,10 @@ class MumbleSender:
         if self.mumble.sound_output is not None and v > self.level:
             self.mumble.sound_output.add_sound(data)
         self.count += 1
+        if time.time() > self.last_report + self.report_interval:
+            if self.mumble.sound_output.get_buffer_size() > self.report_lag_above:
+                print(f"warning: {self.channel} has buffered {self.mumble.sound_output.get_buffer_size():5.1f}s of audio")
+            self.last_report = time.time()
 
 
 class StdinSender:
