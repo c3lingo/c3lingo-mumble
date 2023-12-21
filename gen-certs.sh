@@ -22,7 +22,7 @@ EOF
     -in certs/${CN}-cert.pem
 }
 
-for i in Saal_1 Saal_Grace Saal_Zuse; do
+for i in Saal_1 Saal_G Saal_Z; do
   for j in 0 1 2; do
     gencert "$i-$j"
   done
